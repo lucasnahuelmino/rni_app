@@ -1,0 +1,28 @@
+/* style.css */
+
+/* Centrar tablas */
+.dataframe tbody td, .dataframe thead th {
+    text-align: center !important;
+}
+
+/* Fondo de la app y tipografía */
+body {
+    background-color: #f5f5f5;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Botones */
+.stButton>button {
+    font-size: 16px;
+    padding: 8px 16px;
+}
+
+/* Tarjetas de porcentaje */
+.percentage-card {
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+    font-size:30px;
+    font-weight:bold;
+    color:#000;
+}
