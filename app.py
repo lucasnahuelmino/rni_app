@@ -552,14 +552,14 @@ if "FechaHora" in df_localidad.columns and not df_localidad.empty:
         puntos = len(df)
         localidades = ", ".join(sorted(df["Localidad"].dropna().unique()))
         return pd.Series({
-            "Hora inicio": hora_inicio,
-            "Hora fin": hora_fin,
-            "Tiempo trabajado": format_timedelta_long(tiempo_total),
-            "Cantidad puntos": puntos,
-            "Localidades trabajadas": localidades
+            "Hora de inicio": hora_inicio,
+            "Hora de fin": hora_fin,
+            "Tiempo total trabajado": format_timedelta_long(tiempo_total),
+            "Cantidad de puntos medidos": puntos,
+            "Localidades trabajadas (por día)": localidades
         })
 
-    resumen_dias = df_localidad.groupby("Fecha").apply(resumen_por_dia).reset_index().rename(columns={"Fecha":"FechaGrupo"})
+    resumen_dias = df_localidad.groupby("Fecha").apply(resumen_por_dia).reset_index().rename(columns={"Fecha":"Fecha de medición"})
     
     # --- Resumen mensual ---
     resumen_mensual = df_localidad.groupby("Mes").agg({
