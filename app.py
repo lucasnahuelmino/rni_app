@@ -190,8 +190,6 @@ def eliminar_localidad(nombre_localidad: str):
         return
 
     df = st.session_state["tabla_maestra"]
-
-    # Validar si existe la columna Localidad
     if "Localidad" not in df.columns:
         st.error("❌ La tabla no tiene columna 'Localidad'.")
         return
@@ -318,8 +316,37 @@ if "tabla_maestra" in st.session_state and not st.session_state["tabla_maestra"]
     elif "Fecha" in fila_max:
         fecha_top = fila_max["Fecha"]
 
-    st.markdown("## Valor máximo registrado en Argentina")
-    col1, col2, col3, col4 = st.columns(4)
+    st.markdown("## 🌎 Valor máximo registrado en Argentina")
+    # --- Estilo visual con CSS ---
+    st.markdown("""
+    <style>
+    div[data-testid="stMetricContainer"] {
+        background: rgba(240, 248, 255, 0.6);
+        border: 1px solid rgba(200, 200, 200, 0.3);
+        border-radius: 12px;
+        padding: 16px;
+        text-align: center;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+        transition: all 0.2s ease-in-out;
+    }
+    div[data-testid="stMetricContainer"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    div[data-testid="stMetricLabel"] > div {
+        font-size: 16px;
+        font-weight: 600;
+        color: #2E3B55;
+    }
+    div[data-testid="stMetricValue"] {
+        font-size: 26px;
+        font-weight: 700;
+        color: #004aad;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    col1, col2, col3, col4 = st.columns([2.5, 1.5, 1.5, 1.5])
     col1.metric("Localidad", localidad_top)
     col2.metric("Resultado máximo V/m", f"{resultado_top:.2f}")
     col3.metric("Resultado máximo (%)", f"{resultado_top_pct:.2f}" if resultado_top_pct else "N/A")
