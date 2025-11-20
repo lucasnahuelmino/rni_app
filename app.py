@@ -488,7 +488,7 @@ else:
 # ------------------- RESUMEN Y EDICIÓN DE LOCALIDAD ------------------
 st.header("📊 Gestión de Localidades")
 
-col1, col2, col3 = st.columns([1, 1, 1])
+col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
 
 with col1:
     ccte_filtro = st.selectbox(
@@ -515,6 +515,36 @@ with col2:
         df_filtrado_prov = df_filtrado_ccte.copy()
     else:
         df_filtrado_prov = df_filtrado_ccte[df_filtrado_ccte["Provincia"] == provincia_filtro].copy()
+
+# 🔧 Filtro por Año (incluye 2025 si existe en los datos)
+with col4:
+    año_filtro = "Todos"
+    if not df_filtrado_prov.empty and "Fecha" in df_filtrado_prov.columns:
+        # Convertimos Fecha a datetime para extraer año (acepta dd/mm/aaaa)
+        _años = pd.to_datetime(df_filtrado_prov["Fecha"], dayfirst=True, errors="coerce").dt.year
+        df_filtrado_prov["_Año"] = _años
+
+        años_disponibles = (
+            df_filtrado_prov["_Año"]
+            .dropna()
+            .astype(int)
+            .unique()
+            .tolist()
+        )
+        # Ordenamos descendente para que 2025 aparezca arriba si está
+        años_disponibles = sorted(años_disponibles, reverse=True)
+
+        # Armamos selectbox (si no hay años válidos, mostramos 'Todos' solamente)
+        opciones_año = ["Todos"] + [str(a) for a in años_disponibles]
+        año_filtro = st.selectbox("📅 Año", opciones_año, index=0)
+
+        # Aplicamos filtro si corresponde
+        if año_filtro != "Todos":
+            df_filtrado_prov = df_filtrado_prov[df_filtrado_prov["_Año"] == int(año_filtro)]
+
+        # Limpieza de la columna auxiliar para no “ensuciar” el DF
+        if "_Año" in df_filtrado_prov.columns:
+            df_filtrado_prov = df_filtrado_prov.drop(columns=["_Año"])
 
 with col3:
     # Selección de Localidad dentro de la Provincia elegida
